@@ -13,16 +13,16 @@ Route::get('/student', function (Request $request) {
 Route::middleware('auth:api')->group(function(){
 
 Route::get('/v1/students', [StudentController::class, 'index']);
-Route::get('/v1/student/{id}',[StudentController::class, 'studentByID']);
-Route::patch('/v1/updateStudentInfo/{id}', [StudentController::class,'updateStudentInfo']);
-Route::delete('/v1/deleteStudent/{id}', [StudentController::class, 'deleteStudent']);
+Route::get('/v1/students/{id}',[StudentController::class, 'studentByID']);
+Route::patch('/v1/students/{id}', [StudentController::class,'updateStudentInfo']);
+Route::delete('/v1/students/{id}', [StudentController::class, 'deleteStudent']);
 
 
 });
 
 ///////
 
-Route::post('/v1/newStudent', [StudentController::class, 'newStudent']);
+Route::post('/v1/students', [StudentController::class, 'newStudent']);
 
 
 
