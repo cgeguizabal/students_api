@@ -9,15 +9,22 @@ Route::get('/student', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
+/////
+Route::middleware('auth:api')->group(function(){
 
 Route::get('/v1/students', [StudentController::class, 'index']);
 Route::get('/v1/student/{id}',[StudentController::class, 'studentByID']);
+Route::patch('/v1/updateStudentInfo/{id}', [StudentController::class,'updateStudentInfo']);
+Route::delete('/v1/deleteStudent/{id}', [StudentController::class, 'deleteStudent']);
+
+
+});
+
+///////
 
 Route::post('/v1/newStudent', [StudentController::class, 'newStudent']);
 
-Route::patch('/v1/updateStudentInfo/{id}', [StudentController::class,'updateStudentInfo']);
 
-Route::delete('/v1/deleteStudent/{id}', [StudentController::class, 'deleteStudent']);
 
 Route::get('/v1/auth', function(){
     return response()->json([
@@ -26,3 +33,5 @@ Route::get('/v1/auth', function(){
 })->name('login');
 
 Route::post('/v1/login', [AuthenticationController::class, 'login']);
+
+Route::post('/v1/logout', [AuthenticationController::class, 'logout'])->middleware('auth:api');
