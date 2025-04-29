@@ -11,28 +11,36 @@ use Illuminate\Support\Facades\Validator;
 /**
  * @OA\Tag(
  *     name="Authentication",
- *     description="API Endpoints for Authentication"
+ *     description="Authentication endpoints"
  * )
  */
+
 class AuthenticationController extends Controller
 {
 
 
-    /**
+/**
  * @OA\Post(
  *     path="/api/v1/login",
- *     summary="Login student",
- *     tags={"Authentication Login"},
+ *     summary="Login a student",
+ *     description="Authenticates a student and returns a token",
+ *     tags={"Authentication"},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
  *             required={"email", "password"},
- *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
- *             @OA\Property(property="password", type="string", format="password", example="password123")
+ *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
+ *             @OA\Property(property="password", type="string", example="password123")
  *         )
  *     ),
- *     @OA\Response(response=200, description="Login successful"),
- *     @OA\Response(response=401, description="Invalid credentials")
+ *     @OA\Response(
+ *         response=200,
+ *         description="Login successful"
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Invalid credentials"
+ *     )
  * )
  */
     public function login(authenticationRequest $request){
@@ -66,13 +74,17 @@ class AuthenticationController extends Controller
     }
 
 
-    /**
+  /**
  * @OA\Post(
  *     path="/api/v1/logout",
- *     summary="Logout student",
- *     tags={"Authentication Logout"},
- *     security={{"passport":{}}},
- *     @OA\Response(response=200, description="Logout successful")
+ *     summary="Logout a student",
+ *     description="Logs out the authenticated student",
+ *     tags={"Authentication"},
+ *     security={{"bearerAuth": {}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Logout successful"
+ *     )
  * )
  */
     public function logout(Request $request){

@@ -10,10 +10,20 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 
+
 /**
  * @OA\Tag(
  *     name="Students",
- *     description="Operations related to students"
+ *     description="Operations about students"
+ * )
+ */
+
+ /**
+ * @OA\SecurityScheme(
+ *     type="http",
+ *     scheme="bearer",
+ *     bearerFormat="JWT",
+ *     securityScheme="passport"
  * )
  */
 
@@ -23,14 +33,21 @@ class StudentController extends Controller
 
     //Getting all students
 
-    /**
+ /**
  * @OA\Get(
  *     path="/api/v1/students",
  *     summary="Get all students",
+ *     description="Returns a list of all registered students",
  *     tags={"Students"},
- *     security={{"passport":{}}},
- *     @OA\Response(response=200, description="List of students"),
- *     @OA\Response(response=204, description="No students found")
+ *     security={{"bearerAuth": {}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="List of students successfully obtained"
+ *     ),
+ *     @OA\Response(
+ *         response=204,
+ *         description="No students registered"
+ *     )
  * )
  */
     public function index(){
@@ -46,19 +63,26 @@ class StudentController extends Controller
     //Getting Students by ID
     /**
  * @OA\Get(
- *     path="/api/v1/student/{id}",
+ *     path="/api/v1/students/{id}",
  *     summary="Get student by ID",
- *     tags={"Students by ID"},
- *     security={{"passport":{}}},
+ *     description="Returns a student by the given ID",
+ *     tags={"Students"},
+ *     security={{"bearerAuth": {}}},
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
+ *         description="Student ID",
  *         required=true,
- *         description="ID of the student",
- *         @OA\Schema(type="integer")
+ *         @OA\Schema(type="integer", example=1)
  *     ),
- *     @OA\Response(response=302, description="Student found"),
- *     @OA\Response(response=404, description="Student not found")
+ *     @OA\Response(
+ *         response=200,
+ *         description="Student found"
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Student not found"
+ *     )
  * )
  */
     public function studentByID($id){
@@ -74,19 +98,36 @@ class StudentController extends Controller
     }
 
     //Creating new student
-    /**
+   
+/**
  * @OA\Post(
- *     path="/api/v1/newStudent",
- *     summary="Create a new student",
- *     tags={"New Student"},
+ *     path="/api/v1/students",
+ *     summary="Register a new student",
+ *     description="Registers a new student in the system",
+ *     tags={"Students"},
  *     @OA\RequestBody(
  *         required=true,
- *         @OA\JsonContent(ref="#/components/schemas/Student")
+ *         @OA\JsonContent(
+ *             required={"firstName", "lastName", "age", "grade", "email", "phone_number", "password"},
+ *             @OA\Property(property="firstName", type="string", example="John"),
+ *             @OA\Property(property="lastName", type="string", example="Doe"),
+ *             @OA\Property(property="age", type="integer", example=20),
+ *             @OA\Property(property="grade", type="integer", example=10),
+ *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
+ *             @OA\Property(property="phone_number", type="string", example="123456789"),
+ *             @OA\Property(property="password", type="string", example="password123")
+ *         )
  *     ),
- *     @OA\Response(response=201, description="Successfully created"),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Student successfully created"
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Validation error"
+ *     )
  * )
  */
-
     public function newStudent(StudentRequest $request){
         $studentData = $request->validated();
         $studentData['password'] = Hash::make($studentData['password']);
@@ -98,24 +139,39 @@ class StudentController extends Controller
     }
 
     //Updating Student info
-    /**
+  /**
  * @OA\Patch(
- *     path="/api/v1/updateStudentInfo/{id}",
+ *     path="/api/v1/students/{id}",
  *     summary="Update student information",
- *     tags={"Update Student"},
- *     security={{"passport":{}}},
+ *     description="Updates the information of a specific student",
+ *     tags={"Students"},
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
+ *         description="Student ID",
  *         required=true,
- *         description="ID of the student",
- *         @OA\Schema(type="integer")
+ *         @OA\Schema(type="integer", example=1)
  *     ),
  *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(ref="#/components/schemas/Student")
+ *         required=false,
+ *         @OA\JsonContent(
+ *             @OA\Property(property="firstName", type="string", example="John"),
+ *             @OA\Property(property="lastName", type="string", example="Doe"),
+ *             @OA\Property(property="age", type="integer", example=21),
+ *             @OA\Property(property="grade", type="integer", example=11),
+ *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
+ *             @OA\Property(property="phone_number", type="string", example="123456789"),
+ *             @OA\Property(property="password", type="string", example="newpassword123")
+ *         )
  *     ),
- *     @OA\Response(response=200, description="Student updated successfully")
+ *     @OA\Response(
+ *         response=200,
+ *         description="Student successfully updated"
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Student not found"
+ *     )
  * )
  */
     public function updateStudentInfo(updateStudentRequest $request, $id){
@@ -134,22 +190,27 @@ class StudentController extends Controller
         
     }
 
-    //Deleting Student
-    /**
+ /**
  * @OA\Delete(
- *     path="/api/v1/deleteStudent/{id}",
+ *     path="/api/v1/students/{id}",
  *     summary="Delete a student",
- *     tags={"Delete Student"},
- *     security={{"passport":{}}},
+ *     description="Deletes a student from the system by ID",
+ *     tags={"Students"},
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
+ *         description="Student ID",
  *         required=true,
- *         description="ID of the student",
- *         @OA\Schema(type="integer")
+ *         @OA\Schema(type="integer", example=1)
  *     ),
- *     @OA\Response(response=200, description="Student deleted successfully"),
- *     @OA\Response(response=404, description="Student not found")
+ *     @OA\Response(
+ *         response=200,
+ *         description="Student successfully deleted"
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Student not found"
+ *     )
  * )
  */
     public function deleteStudent($id){
