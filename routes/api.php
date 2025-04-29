@@ -13,3 +13,7 @@ Route::get('/v1/students', [StudentController::class, 'index']);
 Route::get('/v1/student/{id}',[StudentController::class, 'studentByID']);
 
 Route::post('/v1/newStudent', [StudentController::class, 'newStudent']);
+
+Route::patch('/v1/updateStudentInfo/{id}', [StudentController::class,'updateStudentInfo']);
+
+Route::delete('/v1/deleteStudent/{id}', [StudentController::class, 'deleteStudent']);

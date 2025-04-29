@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StudentRequest;
+use App\Http\Requests\updateStudentRequest;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -32,7 +33,7 @@ class StudentController extends Controller
         }
 
         $student = Student::find($id);
-        return response()->json($student,200);       
+        return response()->json($student,302);       
     }
 
     //Creating new student
@@ -42,10 +43,38 @@ class StudentController extends Controller
 
         $student = Student::create($studentData);
 
-        return response()->json(['message'=>'Successfully created', "student" => $student->toArray()],200);
+        return response()->json(['message'=>'Successfully created', "student" => $student->toArray()],201);
         
     }
 
-    //Updatin Student info
-    public function
+    //Updating Student info
+    public function updateStudentInfo(updateStudentRequest $request, $id){
+        $student = Student::find($id);
+        
+        $data = $request->validated();
+
+        if (isset($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        }
+    
+        $student->update($data);
+
+        return response()->json(['message' => 'Student information successfully updated'], 200);
+
+        
+    }
+
+    //Deleting Student
+    public function deleteStudent($id){
+        $student = Student::find($id);
+
+        if (!$student) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+
+        $student->delete();
+
+        return response()->json(['message'=>'Student has been deleted successfully'], 200);
+    }
+    
 }
