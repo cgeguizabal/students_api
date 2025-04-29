@@ -18,14 +18,7 @@ use Illuminate\Support\Facades\Validator;
  * )
  */
 
- /**
- * @OA\SecurityScheme(
- *     type="http",
- *     scheme="bearer",
- *     bearerFormat="JWT",
- *     securityScheme="passport"
- * )
- */
+ 
 
 
 class StudentController extends Controller
