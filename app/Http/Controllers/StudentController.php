@@ -138,6 +138,7 @@ class StudentController extends Controller
  *     summary="Update student information",
  *     description="Updates the information of a specific student",
  *     tags={"Students"},
+ *     security={{"bearerAuth": {}}},
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
@@ -189,6 +190,7 @@ class StudentController extends Controller
  *     summary="Delete a student",
  *     description="Deletes a student from the system by ID",
  *     tags={"Students"},
+ *     security={{"bearerAuth": {}}},
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
