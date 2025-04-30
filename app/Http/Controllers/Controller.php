@@ -16,7 +16,7 @@ namespace App\Http\Controllers;
  *     in="header",
  *     scheme="bearer",
  *     bearerFormat="JWT",
- *     securityScheme="passport"
+ *     securityScheme="bearerAuth"
  * )
  */
 abstract class Controller
