@@ -32,6 +32,7 @@ Route::get('/v1/auth', function(){
     ], 401);
 })->name('login');
 
+
 Route::post('/v1/login', [AuthenticationController::class, 'login']);
 
 Route::post('/v1/logout', [AuthenticationController::class, 'logout'])->middleware('auth:api');
