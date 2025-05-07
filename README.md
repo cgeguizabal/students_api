@@ -38,7 +38,6 @@
 
 ---
 
----
 
 ## ⚙️ Environment Configuration
 
@@ -67,6 +66,3 @@ composer install            # Install PHP dependencies
 cp .env.example .env        # Create your .env file
 php artisan passport:install  # Install Passport keys
 php artisan serve           # Start local development server
-
-
-
