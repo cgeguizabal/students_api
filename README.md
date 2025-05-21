@@ -60,7 +60,7 @@ DB_PASSWORD=your_database_password
 1. Clone the repository  
 2. Open your terminal in the project root  
 3. Run the following commands:
-
+---
 ```bash
 composer install            # Install PHP dependencies
 cp .env.example .env        # Create your .env file
